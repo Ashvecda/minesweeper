@@ -1,12 +1,9 @@
 import random
 from enum import Enum
-from colorama import Fore, Back, Style
+from colorama import Fore, Back
 import pprint
 import os
-import keyboard
-from win32gui import GetForegroundWindow
-import sys
-import subprocess
+
 
 class state(Enum):
     hidden = 1
@@ -300,60 +297,60 @@ class Grid():
                     if row_index+y_offset < 0 or row_index+y_offset >= len(self.numgrid) or col_index+x_offset < 0 or col_index+x_offset >= len(self.numgrid[0]):
                         continue
                     self.numgrid[y + y_offset][x+x_offset] -= 1
-            
-            for y_offset in range(-1, 2):
-                for x_offset in range(-1, 2):
-                    if x_offset == 0 and y_offset == 0:
-                        continue
-                    if row_index+y_offset < 0 or row_index+y_offset >= len(self.numgrid) or col_index+x_offset < 0 or col_index+x_offset >= len(self.numgrid[0]):
-                        continue
-                    if self.bombgrid[y+y_offset][x+x_offset]:
-                        for row_index, row in enumerate(self.bombgrid):
-                            for col_index, col in enumerate(row):
-                                found = False
-                                if not col:
-                                    col = True
-                                    self.numgrid[row_index][col_index] += 9
-                                    for y_offset2 in range(-1, 2):
-                                        if not found:
-                                            for x_offset2 in range(-1, 2):
-                                                if x_offset2 == 0 and y_offset2 == 0:
-                                                    continue
-                                                elif y+y_offset+y_offset2 < 0 or y+y_offset+y_offset2 >= len(self.numgrid) or x+x_offset+x_offset2 < 0 or x+x_offset+x_offset2 >= len(self.numgrid[0]):
-                                                    continue
-                                                else:
-                                                    self.numgrid[row_index+y_offset2][col_index+x_offset2] += 1
-                                                    self.numgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] -= 1
-                                                    self.bombgrid[row_index][col_index] = True
-                                                    found = True
-                                                    break
-                                    break
-                    
-            for y_offset in range(-1, 2):
-                for x_offset in range(-1, 2):
-                    if x_offset == 0 and y_offset == 0:
-                        continue
-                    if y+y_offset < 0 or y+y_offset >= len(self.numgrid) or x+x_offset < 0 or x+x_offset >= len(self.numgrid[0]):
-                        continue
-                    if self.bombgrid[y+y_offset][x_offset]:
-
-                        for y_offset2 in range(-1, 2):
-                            for x_offset2 in range(-1, 2):
-                                if x_offset2 == 0 and y_offset2 == 0:
-                                    continue
-                                if y+y_offset+y_offset2 < 0 or y+y_offset+y_offset2 >= len(self.numgrid) or x+x_offset+x_offset2 < 0 or x+x_offset+x_offset2 >= len(self.numgrid[0]):
-                                    continue
-                                self.numgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] -= 1
-
-
-            for y_offset in range(-1, 2):
-                for x_offset in range(-1, 2):       
-                    self.bombgrid[y+y_offset][x+x_offset] = False
-                    
-                
-            
             self.first_ran = True
             pprint.pprint(self.numgrid)
+            
+        """for y_offset in range(-1, 2):
+            for x_offset in range(-1, 2):
+                if x_offset == 0 and y_offset == 0:
+                    continue
+                if y+y_offset < 0 or y+y_offset >= len(self.numgrid) or x+x_offset < 0 or x+x_offset >= len(self.numgrid[0]):
+                    continue
+                if self.bombgrid[y+y_offset][x+x_offset]:
+                    for row_index, row in enumerate(self.bombgrid):
+                        for col_index, col in enumerate(row):
+                            found = False
+                            if not col:
+                                col = True
+                                self.numgrid[row_index][col_index] += 9
+                                for y_offset2 in range(-1, 2):
+                                    if not found:
+                                        for x_offset2 in range(-1, 2):
+                                            if x_offset2 == 0 and y_offset2 == 0:
+                                                continue
+                                            elif y+y_offset+y_offset2 < 0 or y+y_offset+y_offset2 >= len(self.numgrid) or x+x_offset+x_offset2 < 0 or x+x_offset+x_offset2 >= len(self.numgrid[0]):
+                                                continue
+                                            else:
+                                                self.numgrid[row_index+y_offset2][col_index+x_offset2] += 1
+                                                #self.numgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] -= 1
+                                                self.bombgrid[row_index][col_index] = True
+                                                found = True
+                                                break
+                                break
+                
+        for y_offset in range(-1, 2):
+            for x_offset in range(-1, 2):
+                if x_offset == 0 and y_offset == 0:
+                    continue
+                if y+y_offset < 0 or y+y_offset >= len(self.numgrid) or x+x_offset < 0 or x+x_offset >= len(self.numgrid[0]):
+                    continue
+                if self.bombgrid[y+y_offset][x_offset]:
+
+                    for y_offset2 in range(-1, 2):
+                        for x_offset2 in range(-1, 2):
+                            if x_offset2 == 0 and y_offset2 == 0:
+                                continue
+                            if y+y_offset+y_offset2 < 0 or y+y_offset+y_offset2 >= len(self.numgrid) or x+x_offset+x_offset2 < 0 or x+x_offset+x_offset2 >= len(self.numgrid[0]):
+                                continue
+                            self.numgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] -= 1
+
+
+        for y_offset in range(-1, 2):
+            for x_offset in range(-1, 2):       
+                self.bombgrid[y+y_offset][x+x_offset] = False
+                
+            """
+        
         self.make_view()
 
     def make_view(self):

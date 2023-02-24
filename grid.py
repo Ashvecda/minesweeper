@@ -304,13 +304,44 @@ class Grid():
 
         for y_offset in range(-1, 2):
             for x_offset in range(-1, 2):
+                if x_offset == 0 and y_offset == 0:
+                    continue
+                if y + y_offset < 0 or x + x_offset < 0 or y + y_offset >= len(self.numgrid) or x + x_offset >= len(self.numgrid[0]):
+                    continue
+                found = False
                 if self.bombgrid[y+y_offset][x+x_offset]:
                     for row_index, row in enumerate(self.bombgrid):
                         for col_index, col in enumerate(row):
                             if col:
                                 continue
                             col = True
-                            #adding bombs to top
+                            self.numgrid[row_index][col_index] += 9
+                            for row_offset in range(-1,2):
+                                for col_offset in range(-1,2):
+                                    if row_offset == 0 and col_offset == 0:
+                                        continue
+                                    if row_index + row_offset < 0 or col_index + col_offset < 0 or row_index + row_offset >= len(self.numgrid) or col_index + col_offset >=len(row):
+                                        continue
+                                    self.numgrid[row_index + row_offset][col_index + col_offset] += 1
+                            found = True
+                            break
+                        if found:
+                            break
+
+        for y_offset in range(-1, 2):
+            for x_offset in range(-1, 2):
+                if self.bombgrid[y+y_offset][x+x_offset]:
+                    self.numgrid[y+y_offset][x+x_offset] -= 9
+                    self.bombgrid[y+y_offset][x+x_offset] = False
+                    for y_offset2 in range(-1, 2):
+                        for x_offset2 in range(-1, 2):
+                            if y_offset2 == 0 and x_offset2 == 0:
+                                continue
+                            if y+y_offset+y_offset2 < 0 or y+y_offset+y_offset2 >= len(self.numgrid) or x+x_offset+x_offset2 < 0 or x+x_offset+x_offset2 >= len(self.numgrid[0]):
+                                continue
+                            self.numgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] -= 1
+                            
+
             
         """for y_offset in range(-1, 2):
             for x_offset in range(-1, 2):

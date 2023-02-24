@@ -299,6 +299,18 @@ class Grid():
                     self.numgrid[y + y_offset][x+x_offset] -= 1
             self.first_ran = True
             pprint.pprint(self.numgrid)
+
+
+
+        for y_offset in range(-1, 2):
+            for x_offset in range(-1, 2):
+                if self.bombgrid[y+y_offset][x+x_offset]:
+                    for row_index, row in enumerate(self.bombgrid):
+                        for col_index, col in enumerate(row):
+                            if col:
+                                continue
+                            col = True
+                            #adding bombs to top
             
         """for y_offset in range(-1, 2):
             for x_offset in range(-1, 2):

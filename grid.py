@@ -290,15 +290,7 @@ class Grid():
                         continue
             self.bombgrid[y][x] = False
             self.numgrid[y][x] -= 9
-            for y_offset in range(-1, 2):
-                for x_offset in range(-1, 2):
-                    if x_offset == 0 and y_offset == 0:
-                        continue
-                    if row_index+y_offset < 0 or row_index+y_offset >= len(self.numgrid) or col_index+x_offset < 0 or col_index+x_offset >= len(self.numgrid[0]):
-                        continue
-                    self.numgrid[y + y_offset][x+x_offset] -= 1
-            self.first_ran = True
-            pprint.pprint(self.numgrid)
+            
 
         for y_offset in range(-1, 2):
             for x_offset in range(-1, 2):
@@ -330,6 +322,17 @@ class Grid():
                         break
                 else: continue
 
+        if self.bombgrid[y][x]:
+            for y_offset in range(-1, 2):
+                for x_offset in range(-1, 2):
+                    if x_offset == 0 and y_offset == 0:
+                        continue
+                    if row_index+y_offset < 0 or row_index+y_offset >= len(self.numgrid) or col_index+x_offset < 0 or col_index+x_offset >= len(self.numgrid[0]):
+                        continue
+                    self.numgrid[y + y_offset][x+x_offset] -= 1
+            self.first_ran = True
+            pprint.pprint(self.numgrid)
+
         for y_offset in range(-1, 2):
             for x_offset in range(-1, 2):
                 if y_offset == 0 and x_offset == 0:
@@ -347,6 +350,11 @@ class Grid():
                                 continue
                             if not self.bombgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] and self.numgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] > 0:
                                 self.numgrid[y+y_offset+y_offset2][x+x_offset+x_offset2] -= 1
+
+        for row_index, row in enumerate(self.bombgrid):
+            for col_index, col in enumerate(row):
+                if not col and self.numgrid[row_index][col_index] > 8:
+                    self.numgrid[row_index][col_index] -= 9
         
         self.make_view()
 

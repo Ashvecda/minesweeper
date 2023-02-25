@@ -99,6 +99,7 @@ class Keylogger():
 
     def numgrid(self):
         pprint.pprint(grid.numgrid)
+        pprint.pprint(grid.bombgrid)
     
 
 menu()

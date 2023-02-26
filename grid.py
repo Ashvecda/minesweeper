@@ -264,7 +264,6 @@ class Grid():
         self.create_board()
 
     def flag(self, y, x):
-        print(self.viewgrid[y][x])
         if self.viewgrid[y][x] == state.hidden:
             self.viewgrid[y][x] = state.flagged
             self.remaining -= 1
@@ -276,6 +275,7 @@ class Grid():
         self.create_board()
 
     def first(self, y, x):
+        fixlist = []
         if self.bombgrid[y][x]:
             while True:
                 randy = random.randrange(0, len(self.bombgrid))
@@ -283,36 +283,21 @@ class Grid():
                 if not self.bombgrid[randy][randx]:
                     self.bombgrid[randy][randx] = True
                     break
-            """found = False
-            for row_index, row in enumerate(self.bombgrid):
-                for col_index, col in enumerate(row):
-                    if not col:
-                        self.bombgrid[row_index][col_index] = True
-                        found = True
-                        break
-                if found: break"""
             
         for y_offset in range(-1, 2):
             for x_offset in range(-1, 2):
                 if self.bombgrid[y+y_offset][x+x_offset]:
+                    fixlist.append((y+y_offset, x+x_offset))
                     while True:
                         randy = random.randrange(0, len(self.bombgrid))
                         randx = random.randrange(0, len(self.bombgrid[0]))
                         if not self.bombgrid[randy][randx]:
                             self.bombgrid[randy][randx] = True
                             break
-                """found = False
-                if self.bombgrid[y+y_offset][x+x_offset]:
-                    for row_index, row in enumerate(self.bombgrid):
-                        for col_index, col in enumerate(row):
-                            if not col:
-                                self.bombgrid[row_index][col_index] = True
-                                found = True
-                                break
-                        if found: break"""
-                self.bombgrid[y+y_offset][x+x_offset] = False
-
-            self.bombgrid[y][x] = False
+        
+        for i, j in fixlist:
+            self.bombgrid[i][j] = False
+        self.bombgrid[y][x] = False
         self.first_play = True
         self.create_numgrid()
         self.make_view()

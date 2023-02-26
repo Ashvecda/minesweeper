@@ -261,6 +261,7 @@ class Grid():
                 self.loss()
             else:
                 self.reveal(y, x)
+        self.win_check()
         self.create_board()
 
     def flag(self, y, x):
